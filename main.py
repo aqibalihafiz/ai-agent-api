@@ -1,30 +1,37 @@
 
-from fastapi import FastApi
+from fastapi import FastAPI
 from pydantic import BaseModel
 import anthropic
 import os
 
-app = FastApi()
+app = FastAPI()
 
 client = anthropic.Anthropic(
-  api_key = os.environ["ANTHROPIC_API_KEY"])
+    api_key=os.environ["ANTHROPIC_API_KEY"]
+)
 
 class Question(BaseModel):
-  question:str
+    question: str
 
 @app.get("/")
 def home():
-  return {"message":"AI API IS WORKING"}
+    return {"message": "AI API IS WORKING"}
 
 @app.post("/ask")
-def ask_question(data : Question):
+def ask_question(data: Question):
 
-  response = client.message.create(
-      model = "claude-sonnet-5",
-      max_tokens = 200,
-      messages[
-      {"role":"user","content":data.question}
-      ])
-  return{
-      "answer":response.content[0].text
-      }    
+    response = client.messages.create(
+        model="claude-sonnet-5",
+        max_tokens=200,
+        messages=[
+            {
+                "role": "user",
+                "content": data.question
+            }
+        ]
+    )
+
+    return {
+        "answer": response.content[0].text
+    }
+}
