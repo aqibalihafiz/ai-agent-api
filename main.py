@@ -34,4 +34,3 @@ def ask_question(data: Question):
     return {
         "answer": response.content[0].text
     }
-}
